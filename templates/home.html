@@ -12,13 +12,53 @@
     <body>
         {% include 'partials/navbar.html' %}
 
-        <div class="container">
-            <h1>{{ projectName }}</h1>
+        <div class="container w-full px-[10%] py-[3%] font-serif">
+            <h1 class="text-2xl font-bold">{{ projectName }}</h1>
+
+            <div class="files-div w-full mt-[2%]">
+                <form id="file-list-form" name="file-list-form" method="POST" action="{{ url_for('process_files') }}">
+                    <table class="w-full border-collapse table-auto">
+                        <thead>
+                            <tr class="text-left bg-[#6b8680]">
+                                <th class="text-center"><input id="all-file" onclick="clickAllCheckBox('all-file')" name="all-file" value="all" type="checkbox" class="form-checkbox rounded-md h-5 w-5 cursor-pointer"></th>
+                                <th class="px-4 py-2">Nom</th>
+                                <th class="px-4 py-2">Date</th>
+                                <th class="px-4 py-2">Type</th>
+                                <th class="px-4 py-2">Taille</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {% for file in fileList %}
+                            <tr class="even:bg-gray-300 hover:bg-[#a4826d]">
+                                <th class="border">
+                                    <input onclick="onclickOneCheckBox('all-file')" id="{{ loop.index }}-{{ file.name }}" name="file-list" type="checkbox" value="{{ file.name }}" class="file-list form-checkbox rounded-md h-5 w-5 cursor-pointer">
+                                </th>
+                                <td onclick="document.getElementById('{{ loop.index }}-{{ file.name }}').click()" class="border px-4 py-2">{{ file.name }}</td>
+                                <td onclick="document.getElementById('{{ loop.index }}-{{ file.name }}').click()" class="border px-4 py-2">{{ file.date }}</td>
+                                <td onclick="document.getElementById('{{ loop.index }}-{{ file.name }}').click()" class="border px-4 py-2">{{ file.type }}</td>
+                                <td onclick="document.getElementById('{{ loop.index }}-{{ file.name }}').click()" class="border px-4 py-2">{{ file.size }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+                <div id="file-to-download" class="grid grid-cols-6 w-full mt-6"></div>
+                <div className='flex'>
+                    <button id="validate" onclick="validerFichier()"  class='bg-color-primary-1 bg-color-primary-2-hover color-primary-2 color-secondary-hover border-color-secondary-hover border-2 border-color-primary-1 px-5 py2 rounded-3xl h-10 font-semibold w-40 text-xl mt-8'>
+                        <span>Valider</span>
+                    </button>
+                    <button onclick="terminer()" id="done" class='mr-4 bg-color-primary-2 bg-color-secondary-hover color-primary-1 color-primary-2-hover border-2 border-color-primary-1 px-5 py2 rounded-3xl h-10 font-semibold w-40 text-xl mt-8'>
+                        <span>Terminer</span>
+                    </button>
+                </div>
+            </div>
+              
         </div>
 
         {% include 'partials/footer.html' %}
         
+        <script type="text/javascript"  src="{{ url_for('static', filename='js/jquery-3.6.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/main.js') }}" async defer></script>
-        <script src="https://cdn.tailwindcss.com" async defer></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     </body>
 </html>
