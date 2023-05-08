@@ -28,7 +28,6 @@ def process_files():
         fileList = _json["file-list"]
         #Traitement
         print(fileList)
-        client.compressClient(fileList[0])
         
         response["data"] = fileList
         return json.dumps(response), 200
@@ -41,11 +40,10 @@ def process_files():
 
 @app.route('/download_file/<path:filename>')
 def download_file(filename):
-    return client.decompressClient(filename)
+    return client.compressClient(filename)
 
 @app.route('/terminer', methods=['POST'])
 def terminer():
-    client.closeConnection()
     response = {
         "code": 200,
         "data":[],
