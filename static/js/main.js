@@ -128,4 +128,4 @@ function areAllChecked(className) {
     return allChecked;
 }
   
-  
+$('.file-list').prop('checked', false); 

@@ -1,12 +1,19 @@
 import os
 import mimetypes
 
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
+
+directory_file = os.getenv('FILE_DIRECTORY')
+
 from datetime import datetime
 
 def get_file_list():
     file_list = []
-    for file_name in os.listdir('static/files'):
-        file_path = os.path.join('static/files', file_name)
+    for file_name in os.listdir(directory_file):
+        file_path = os.path.join(directory_file, file_name)
         if os.path.isfile(file_path):
             # Récupérer les informations sur le fichier
             file_stat = os.stat(file_path)
