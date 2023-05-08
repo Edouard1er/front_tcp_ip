@@ -19,31 +19,25 @@ class Client:
             print("Connection échoué.")
             return False
 
-    def communicate(self):
+    def communicate(self, chosen_file):
         try:
-            
-            ready = select.select([self.client_socket], [], [], 1)
-            if ready[0]:
-                files_list = self.client_socket.recv(1024).decode()
-                print(files_list)
+            files_list = self.client_socket.recv(1024).decode()
+            print(chosen_file)
 
-                chosen_file = "test.txt"
-                self.client_socket.send(chosen_file.encode())
-                while True:
-                    code_table = self.client_socket.recv(1024)
-                    obj = pickle.loads(code_table)
-                    print("Test 1")
-                    compressed_data = self.client_socket.recv(1024).decode()
-                    print("Test 3",compressed_data)
-                    d_compress_file = Codage.decompressData(compressed_data, obj[0])
-                    
-                    file = open("newFile.txt", "w")
+            self.client_socket.send(chosen_file.encode())
+            while True:
+                code_table = self.client_socket.recv(1024)
+                obj = pickle.loads(code_table)
+                print("Test 1")
+                compressed_data = self.client_socket.recv(1024).decode()
+                print("Test 3", compressed_data)
+                d_compress_file = Codage.decompressData(compressed_data, obj[0])
 
-                    file.write(d_compress_file)
+                file = open("newFile.txt", "w")
 
-                    file.close()
+                file.write(d_compress_file)
+
+                file.close()
         except Exception as e:
             print(f"Error occurred during communication with the server: {str(e)}")
             self.client_socket.close()
-
-

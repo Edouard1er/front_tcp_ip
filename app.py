@@ -8,17 +8,16 @@ app = Flask(__name__)
 
 toolbar = DebugToolbarExtension(app)
 
+client = None
+
 @app.route('/', methods=['GET'])
 def home():
     projectName = "Projet TCP-IP"
     fileList = files.get_file_list()
-    client = Client('localhost', 6666)
-    isConnected = client.connect()
 
-    if isConnected:
-        client.communicate()
-    else:
-        print("Error occurred during connection")
+
+
+
     return render_template('home.html', projectName=projectName, fileList=fileList)
 
 @app.route('/process_files', methods=['POST'])
@@ -34,6 +33,10 @@ def process_files():
         _json = request.json
         fileList = _json["file-list"]
         #Traitement
+        client = Client('localhost', 6666)
+        client.connect()
+        print(fileList[0], 'data')
+        client.communicate(fileList[0])
         
         response["data"] = fileList
         return json.dumps(response), 200
