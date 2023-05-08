@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, json, abort, send_from_direct
 from flask_debugtoolbar import DebugToolbarExtension
 
 from controllers import files
+import client
 
 app = Flask(__name__)
 
@@ -26,6 +27,8 @@ def process_files():
         _json = request.json
         fileList = _json["file-list"]
         #Traitement
+        print(fileList)
+        client.compressClient(fileList[0])
         
         response["data"] = fileList
         return json.dumps(response), 200
@@ -38,11 +41,11 @@ def process_files():
 
 @app.route('/download_file/<path:filename>')
 def download_file(filename):
-    file_path = 'static/files'
-    return  send_from_directory(file_path, filename, as_attachment=True)
+    return client.decompressClient(filename)
 
 @app.route('/terminer', methods=['POST'])
 def terminer():
+    client.closeConnection()
     response = {
         "code": 200,
         "data":[],
